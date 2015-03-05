@@ -1,0 +1,2 @@
+/*! ybox 2015-03-04 */
+require.config({baseUrl:"js/vendor",paths:{jquery:"jquery/jquery",underscore:"underscore/underscore-master/underscore",json:"json/JSON-js-master/json2",backbone:"backbone/backbone"},shim:{jquery:{exports:"$"},underscore:{exports:"_"},backbone:{deps:["jquery","underscore"],exports:"Backbone"}}});
