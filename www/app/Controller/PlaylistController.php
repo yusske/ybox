@@ -108,7 +108,12 @@ class PlaylistController extends AppController {
 			$data['Playlist']['counter'] = $track['Playlist']['counter'] + 1;
 		}
 		$result = $this->Playlist->save($data);
-		return $this->json($data);
+		if ($result) {
+			$data['_added'] = true;
+			return $this->json($data);
+		} else {
+			return $this->error("Add Failed", "An error occured while trying to save.");
+		}
 	}
 
 	public function edit($id=null) {
@@ -117,6 +122,7 @@ class PlaylistController extends AppController {
 		if ($r) {
 	        if ($this->Playlist->save($this->request->data)) {
 	        	$r = $this->Playlist->findById($id);
+	        	$r['_edited'] = true;
 	            return $this->json($r);
 	        } else {
 	            return $this->error("Edit Failed","An error occured while trying to save the edit");
