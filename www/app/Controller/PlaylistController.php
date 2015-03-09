@@ -93,8 +93,14 @@ class PlaylistController extends AppController {
 	public function add() {
 		$data = $this->request->data;
 		$track_id = $data['Playlist']['track_id'];
+		$mode = $data['Playlist']['mode'];
+		$slug = $data['Playlist']['slug'];
 		$track = $this->Playlist->find('first', array(
-			'conditions' => array('track_id' => $track_id)
+			'conditions' => array(
+				'track_id' => $track_id,
+				'mode' => $mode,
+				'slug' => $slug
+			)
 		));
 		$data['Playlist']['counter'] = 1;
 		if ($track) {
