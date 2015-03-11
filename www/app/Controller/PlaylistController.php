@@ -142,6 +142,26 @@ class PlaylistController extends AppController {
 			return $this->error("Delete failed","No record with id '$id' found");
 		}
 	}
+
+	public function checksong($id=null) {
+		$data = $this->request->data['s'];
+		$input = array();
+		$input['Playlist'] = array();
+		if ($data && array_key_exists('s',$data)) {
+			$status = $data['s'];
+			$this->Playlist->id = $id;
+			$input['Playlist']['status'] = $status;
+			$r = $this->Playlist->findById($id);
+			if ($r) {
+				$this->Playlist->save($input);
+				$input = $this->Playlist->findById($id);
+				$input['_edited'] = true;
+				return $this->json($input);
+			}else {
+				$this->error("Check Song Failed","Song id '$id' not found");
+			}
+		}
+	}
 }
 
 ?>
