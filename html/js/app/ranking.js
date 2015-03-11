@@ -2,9 +2,10 @@
 
   var Item = Backbone.Model.extend({
     defaults: {
-      id: "0",
-      songName: "empty",
-      creationDate: "",
+      id: 0,
+      track: 'empty',
+      artist:'empty',
+      created: '',
       comparator: 0,
       counter: 1,
       status:'new'
@@ -13,10 +14,7 @@
 
   var List = Backbone.Collection.extend({
     model: Item,
-    url: 'http://'+window.location.host+'/ybox/service/getplaylist.php',
-    parse: function (response) {
-      return response.output;
-    }
+    url: 'http://'+window.location.host+'/ybox/www/playlist'
   });
   var ItemView = Backbone.View.extend({
     tagName: 'li', // name of tag to be created
@@ -55,8 +53,9 @@
       console.log('swap');
      $(this.el).toggleClass('ui-btn-b');
       var that = this;
-      var status=(this.model.attributes.status!='played')?'played':'new'
-      $.ajax({
+      var s=(this.model.attributes.status!='played')?'played':'new';
+      this.model.save({status:s});
+      /*$.ajax({
         url: 'http://'+window.location.host+'/ybox/service/checksong.php',
         type: 'GET',
         data:{id: this.model.id,s:status},
@@ -68,7 +67,7 @@
         error: function (jqXHR, textStatus, errorThrown) {
           console.log('error...')
         }
-      });
+      });*/
     },
     // `remove()`: We use the method `destroy()` to remove a model from its collection. Normally this would also delete the record from its persistent storage, but we have overridden that (see above).
     remove: function(){
@@ -106,6 +105,7 @@
       };
       var that = this;
       entityList.fetch({
+        data:{slug:'marcohaus', mode:'BAR'},
         success: function (collection, response) {
           console.log(response);
           that.collection = collection;
