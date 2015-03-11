@@ -33,5 +33,6 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller {
 	public function beforeFilter() {
 		$this->response->header('Access-Control-Allow-Origin', '*');
+		$this->response->header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
 	}
 }
