@@ -11,6 +11,7 @@ class PlaylistController extends AppController {
 
 	private function error($type, $message) {
 		$this->response->type('text/json');
+		$this->response->statusCode(500);
 		$this->response->body(json_encode(array(
 			'error' => true,
 			'type' => $type,
