@@ -4,26 +4,19 @@ class PlaylistController extends AppController {
 	public $uses = array('Playlist');
 
 	private function json($object) {
-
-		return new CakeResponse(
-			array(
-				'type' => 'text/json',
-				'body' => json_encode($object)
-			)
-		);
+		$this->response->type('text/json');
+		$this->response->body(json_encode($object));
+		return $this->response;
 	}
 
 	private function error($type, $message) {
-		return new CakeResponse(
-			array(
-				'type' => 'text/json',
-				'body' => json_encode(array(
-					'error' => true,
-					'type' => $type,
-					'message' => $message
-				))
-			)
-		);
+		$this->response->type('text/json');
+		$this->response->body(json_encode(array(
+			'error' => true,
+			'type' => $type,
+			'message' => $message
+		)));
+		return $this->response;
 	}
 
 	private function simplify_array($array, $model) {
@@ -42,9 +35,9 @@ class PlaylistController extends AppController {
 		switch ($f) {
 			case 'default':
 			default:
-				break;
-			case 'simple':
 				$input = $this->simplify_array($input,'Playlist');
+				break;
+			case 'complex':
 				break;
 		}
 		return $this->json($input);
@@ -59,16 +52,13 @@ class PlaylistController extends AppController {
 			case 'default':
 			default:
 				break;
-			case 'simple':
 				$input = $input['Playlist'];
+			case 'complex':
 				break;
 		}
 		return $this->json($input);
 	}
 
-	public function beforeFilter() {
-		parent::beforeFilter();
-	}
 
 	public function index() {
 		
