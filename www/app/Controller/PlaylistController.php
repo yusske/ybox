@@ -109,14 +109,17 @@ class PlaylistController extends AppController {
 
 	public function edit($id=null) {
 		$this->Playlist->id = $id;
+		$payload = array('Playlist' => array());
+		$payload = json_decode(file_get_contents("php://input"));
 		$r = $this->Playlist->findById($id);
 		if ($r) {
-	        if ($this->Playlist->save($this->request->data)) {
+	        if ($this->Playlist->save($payload)) {
 	        	$r = $this->Playlist->findById($id);
 	        	$r['_edited'] = true;
 	            return $this->json($r);
 	        } else {
-	            return $this->error("Edit Failed","An error occured while trying to save the edit");
+	        	$str = var_export($payload, true);
+	            return $this->error("Edit Failed","An error occured while trying to save the edit. $str");
 	        }
 	    } else {
 	    	return $this->error("Edit Failed","User with ID '$id' does not exist");
