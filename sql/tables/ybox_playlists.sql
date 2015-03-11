@@ -10,6 +10,6 @@ CREATE TABLE ybox_playlists (
 	mode ENUM('DJ','BAR') NOT NULL,
 	slug VARCHAR(32) NOT NULL,
 	user_id BIGINT NOT NULL,
-	status ENUM('NEW','PLAYED','VIEWED') NOT NULL DEFAULT 'NEW',
+	status ENUM('new','played','viewed') NOT NULL DEFAULT 'new',
 	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
