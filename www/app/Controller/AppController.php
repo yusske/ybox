@@ -32,13 +32,13 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-	private function json($object) {
+	protected function json($object) {
 		$this->response->type('text/json');
 		$this->response->body(json_encode($object));
 		return $this->response;
 	}
 
-	private function error($type, $message) {
+	protected function error($type, $message) {
 		$this->response->type('text/json');
 		$this->response->statusCode(500);
 		$this->response->body(json_encode(array(
@@ -48,7 +48,7 @@ class AppController extends Controller {
 		)));
 		return $this->response;
 	}
-	
+
 	public function beforeFilter() {
 		$this->response->header('Access-Control-Allow-Origin', '*');
 		$this->response->header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
