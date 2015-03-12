@@ -31,6 +31,24 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+
+	private function json($object) {
+		$this->response->type('text/json');
+		$this->response->body(json_encode($object));
+		return $this->response;
+	}
+
+	private function error($type, $message) {
+		$this->response->type('text/json');
+		$this->response->statusCode(500);
+		$this->response->body(json_encode(array(
+			'error' => true,
+			'type' => $type,
+			'message' => $message
+		)));
+		return $this->response;
+	}
+	
 	public function beforeFilter() {
 		$this->response->header('Access-Control-Allow-Origin', '*');
 		$this->response->header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');

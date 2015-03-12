@@ -3,23 +3,6 @@
 class PlaylistController extends AppController {
 	public $uses = array('Playlist');
 
-	private function json($object) {
-		$this->response->type('text/json');
-		$this->response->body(json_encode($object));
-		return $this->response;
-	}
-
-	private function error($type, $message) {
-		$this->response->type('text/json');
-		$this->response->statusCode(500);
-		$this->response->body(json_encode(array(
-			'error' => true,
-			'type' => $type,
-			'message' => $message
-		)));
-		return $this->response;
-	}
-
 	private function simplify_array($array, $model) {
 		$result = array();
 		foreach ($array as $record) {

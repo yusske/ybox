@@ -11,5 +11,8 @@ CREATE TABLE ybox_playlists (
 	slug VARCHAR(32) NOT NULL,
 	user_id BIGINT NOT NULL,
 	status ENUM('new','played','viewed') NOT NULL DEFAULT 'new',
-	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT UNIQUE UN_ybox_playlists_source (mode, slug, track_id),
+	INDEX IX_ybox_playlist_user_id (user_id)
 );
+
