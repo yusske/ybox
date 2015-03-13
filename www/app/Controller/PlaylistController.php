@@ -35,8 +35,8 @@ class PlaylistController extends AppController {
 		switch ($f) {
 			case 'default':
 			default:
-				break;
 				$input = $input['Playlist'];
+				break;
 			case 'complex':
 				break;
 		}
