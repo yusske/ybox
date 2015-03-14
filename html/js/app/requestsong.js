@@ -1,28 +1,24 @@
-// **This example introduces two new Model actions (swap and delete), illustrating how such actions can be handled within a Model's View.**
-//
-// _Working example: [5.html](../5.html)._
-
-//
-(function ($) {
+define(function (require) {
+  var Backbone = require('backbone');
   // `Backbone.sync`: Overrides persistence storage with dummy function. This enables use of `Model.destroy()` without raising an error.
   var Item = Backbone.Model.extend({
+    urlRoot: 'http://' + window.location.host + '/ybox/www/playlist',
     defaults: {
-      id: "0",
-      songName: "empty",
-      creationDate: "",
+      track: 'empty',
+      artist: 'empty',
       comparator: 0,
       counter: 1,
       status: 'new',
-      clientid:''
+      track_id: '',
+      mode: 'BAR',
+      slug: '',
+      user_id: ''
     }
   });
 
   var List = Backbone.Collection.extend({
     model: Item,
-    url: function (){ return 'http://'+window.location.host+'/ybox/service/getplaylist.php?cid='+$('#cid').val(); },
-    parse: function (response) {
-      return response.output;
-    }
+    url: 'http://' + window.location.host + '/ybox/www/playlist'
   });
 
   var ItemView = Backbone.View.extend({
@@ -42,14 +38,14 @@
     },
     // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
     render: function () {
-      if (this.model.get('status') === 'played'){
-              $(this.el).html("<a href='#'>"+ this.model.get('songName')+'</a>');
-              $(this.el).attr('data-theme','b');
-              $(this.el).attr('data-icon','check');
-          }
-          else{
-            $(this.el).html(this.model.get('songName'));
-          }
+      var songName = this.model.get('track') + ' - ' + this.model.get('artist');
+      if (this.model.get('status') === 'played') {
+        $(this.el).html("<a href='#'>" + songName + '</a>');
+        $(this.el).attr('data-theme', 'b');
+        $(this.el).attr('data-icon', 'check');
+      } else {
+        $(this.el).html(songName);
+      }
       return this; // for chainable calls, like .render().el
     },
     // `unrender()`: Makes Model remove itself from the DOM.
@@ -70,7 +66,7 @@
     },
     initialize: function () {
       _.bindAll(this, 'render', 'addItem', 'appendItem'); // every function that uses 'this' as the current object should be in here
-      
+
       var that = this;
       this.getSongs();
       setInterval(function () {
@@ -83,7 +79,13 @@
         return chapter.get('id'); // Note the minus! for desc order
       };
       var that = this;
+      var cid = $('#cid').val();
       entityList.fetch({
+        data: {
+          userid: cid,
+          slug: 'marcohaus',
+          mode: 'BAR'
+        },
         success: function (collection, response) {
           console.log(response);
           that.collection = collection;
@@ -108,39 +110,31 @@
       var clientid = $('#cid').val();
       if ($.trim(title) == '')
         return false;
-
       this.counter++;
-      var item = new Item();
-      item.set({
-        songName: title,
-        clientid: clientid
-      });
       var self = this;
-      $.ajax({
-        type: "POST",
-        url: 'http://'+window.location.host+'/ybox/service/createplaylist.php',
-        data: {
-          sn: title,
-          cid: clientid
+      var item = new Item({
+        track: title,
+        user_id: clientid,
+        slug: 'marcohaus',
+        mode: 'BAR'
+      });
+      item.save({
+        success: function () {
+          self.appendItem(item);
         }
-      }).done(function () {
-        self.appendItem(item);
       });
       $('#title').val('');
     },
     appendItem: function (item) {
-      /*  var value = $('#title').val();
-        if ($.trim(value) == '')
-          return false;*/
 
       var itemView = new ItemView({
         model: item
       });
       $('ol', this.el).append(itemView.render().el);
       $("ol").listview("refresh");
-      window.scrollTo(0, document.body.scrollHeight);
     }
   });
 
   var listView = new ListView();
-})(jQuery);
+
+});

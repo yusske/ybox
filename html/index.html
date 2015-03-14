@@ -4,13 +4,14 @@
   <meta charset="utf-8">
   <title>Mi Play list</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
- <script src="js/vendor/jquery/jquery.min.js"></script>
-  <script src="js/vendor/json/JSON-js-master/json2.js"></script>
-  <script src="js/vendor/underscore/underscore-master/underscore-min.js"></script>
-  <script src="js/vendor/backbone/backbone.js"></script>
-  <link rel="stylesheet" href="js/vendor/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css"></link>
-  <script src="js/vendor/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
-  <link rel="stylesheet" href="js/vendor/jquery.mobile-1.4.5/black.min.css"></link>
+  <link rel="stylesheet" href="js/vendor/jquerymobile/jquery.mobile-1.4.5.min.css"></link>
+  <script data-main="js/app/main" src="js/vendor/require/require.js"></script>
+  <link rel="stylesheet" href="js/vendor/jquerymobile/black.min.css"></link>
+  <script>
+            require(['main'], function (main) {
+                require(['requestsong']);
+            });
+  </script>
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -25,6 +26,7 @@
       $('#cid').val(clientId);
     });
 </script>
+
 </head>
 <body>
 <input type="hidden" id="cid">
@@ -45,7 +47,5 @@
 
     </div>
   </div>
-  <script src="dist/js/requestsong.js"></script>
-  <!--<script src="js/app/requestsong.js"></script>-->
 </body>
 </html>

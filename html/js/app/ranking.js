@@ -1,5 +1,5 @@
-(function ($) {
-
+define(function (require) {
+  var Backbone = require('backbone');
   var Item = Backbone.Model.extend({
     defaults: {
       id: 0,
@@ -55,19 +55,6 @@
       var that = this;
       var s=(this.model.attributes.status!='played')?'played':'new';
       this.model.save({status:s});
-      /*$.ajax({
-        url: 'http://'+window.location.host+'/ybox/service/checksong.php',
-        type: 'GET',
-        data:{id: this.model.id,s:status},
-        success: function (data, textStatus, jqXHR) {
-          if (data.output.status === 'played'){
-              $(that.el).addlCass('ui-btn-b');
-          }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.log('error...')
-        }
-      });*/
     },
     // `remove()`: We use the method `destroy()` to remove a model from its collection. Normally this would also delete the record from its persistent storage, but we have overridden that (see above).
     remove: function(){
@@ -158,4 +145,4 @@
   });
 
   var listView = new ListView();
-})(jQuery);
+});

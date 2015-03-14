@@ -1,5 +1,4 @@
 require.config({
-  baseUrl: 'js/vendor',
   paths: {
     // the left side is the module ID,
     // the right side is the path to
@@ -9,10 +8,11 @@ require.config({
     // is using jQuery 1.9.0 located at
     // js/lib/jquery-1.9.0.js, relative to
     // the HTL page.
-    jquery: 'jquery/jquery',
-    underscore: 'underscore/underscore-master/underscore',
-    json:'json/JSON-js-master/json2',
-    backbone: 'backbone/backbone'
+    jquery: '../vendor/jquery/jquery',
+    underscore: '../vendor/underscore/underscore-master/underscore',
+    json:'../vendor/json/JSON-js-master/json2',
+    backbone: '../vendor/backbone/backbone',
+    jquerymobile:'../vendor/jquerymobile/jquerymobile'
     //marionette: 'vendor/backbone.marionette/core/backbone.marionette'
   },
   shim: {
@@ -25,6 +25,12 @@ require.config({
     backbone: {
       deps: ['jquery', 'underscore'],
       exports: 'Backbone'
+    },
+    jquerymobile:{
+      deps: ['jquery', 'underscore'],
+      exports:'jquerymobile'
     }
   }
 });
+
+require(['jquery', 'jquerymobile']);
