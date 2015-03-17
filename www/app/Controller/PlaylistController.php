@@ -70,21 +70,24 @@ class PlaylistController extends AppController {
 		$payload = json_decode(file_get_contents("php://input"), true);
 		$payload['counter'] = 1;
 		//return $this->json($payload);
-		$track_id = $payload['track_id'];
+		//$track_id = $payload['track_id'];
 		$mode = $payload['mode'];
 		$slug = $payload['slug'];
-		$track = $this->Playlist->find('first', array(
+
+//the counter  should be calculated differently, we need each request be inserted, not by updating the current record
+		/*$track = $this->Playlist->find('first', array(
 			'conditions' => array(
 				'track_id' => $track_id,
 				'mode' => $mode,
 				'slug' => $slug
 			)
-		));
+		));*/
 		
-		if ($track) {
+	/*	if ($track) {
 			$payload['id'] = $track['Playlist']['id'];
 			$payload['counter'] = $track['Playlist']['counter'] + 1;
-		}
+		}*/
+
 		$result = $this->Playlist->save($payload);
 		$id = $this->Playlist->getLastInsertId();
 		if ($result) {
