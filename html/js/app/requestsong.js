@@ -1,8 +1,8 @@
 define(function (require) {
-  var Backbone = require('backbone');
-  // `Backbone.sync`: Overrides persistence storage with dummy function. This enables use of `Model.destroy()` without raising an error.
+  var Backbone = require('backbone'),
+    url = require('urlHelper');
   var Item = Backbone.Model.extend({
-    urlRoot: 'http://' + window.location.host + '/ybox/www/playlist',
+    urlRoot: url.getHttpHost() + url.getPlaylistService(),
     defaults: {
       track: 'empty',
       artist: 'empty',
@@ -18,7 +18,7 @@ define(function (require) {
 
   var List = Backbone.Collection.extend({
     model: Item,
-    url: 'http://' + window.location.host + '/ybox/www/playlist'
+    url: url.getHttpHost() + url.getPlaylistService()
   });
 
   var ItemView = Backbone.View.extend({
@@ -69,9 +69,9 @@ define(function (require) {
 
       var that = this;
       this.getSongs();
-      setInterval(function () {
+      /*setInterval(function () {
         that.getSongs();
-      }, 15000);
+      }, 15000);*/
     },
     getSongs: function () {
       var entityList = new List();
@@ -116,7 +116,8 @@ define(function (require) {
         track: title,
         user_id: clientid,
         slug: 'marcohaus',
-        mode: 'BAR'
+        mode: 'BAR',
+        track_id: '1'
       });
       item.save({
         success: function () {
@@ -130,6 +131,7 @@ define(function (require) {
       var itemView = new ItemView({
         model: item
       });
+      
       $('ol', this.el).append(itemView.render().el);
       $("ol").listview("refresh");
     }
