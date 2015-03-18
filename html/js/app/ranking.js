@@ -133,7 +133,7 @@ define(function (require) {
       });
     },
     render: function () {
-      //$('#playlist').empty();
+     // $('#playlist').empty();
       var self = this;
       _(this.collection.models).each(function (item) { // in case collection is not empty
         self.appendItem(item);
@@ -145,8 +145,8 @@ define(function (require) {
       });
       if ($('[data-songid=' + item.id + ']').length === 0) {
         $('#playlist', this.el).append(itemView.render().el);
-        //itemView.validateStatus();
       }
+      
       $('#playlist').listview('refresh');
     },
     updateCounter: function () {

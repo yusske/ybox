@@ -12,7 +12,7 @@ define(function (require) {
       track_id: '',
       mode: 'BAR',
       slug: '',
-      user_id: ''
+      user_id: '0-0'
     }
   });
 
@@ -28,25 +28,35 @@ define(function (require) {
       'click span.swap': 'swap',
       'click span.delete': 'remove'
     },
+    id: function () {
+      return 'itemId_' + this.model.get("id");
+    },
+
 
     // `initialize()` now binds model change/removal to the corresponding handlers below.
     initialize: function () {
       _.bindAll(this, 'render', 'unrender', 'remove'); // every function that uses 'this' as the current object should be in here
-
       this.model.bind('change', this.render);
       this.model.bind('remove', this.unrender);
     },
     // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
     render: function () {
       var songName = this.model.get('track') + ' - ' + this.model.get('artist');
-      if (this.model.get('status') === 'played') {
-        $(this.el).html("<a href='#'>" + songName + '</a>');
-        $(this.el).attr('data-theme', 'b');
-        $(this.el).attr('data-icon', 'check');
-      } else {
-        $(this.el).html(songName);
-      }
+      $(this.el).html(songName);
       return this; // for chainable calls, like .render().el
+    },
+    checkItem: function () {
+
+      var songName = this.model.get('track') + ' - ' + this.model.get('artist');
+      var itemId = '#itemId_' + this.model.get('id');
+
+      if (this.model.get('status') === 'played') {
+        $(itemId).empty();
+        $(itemId).html(songName);
+        $(itemId).addClass('ui-btn-b ui-btn ui-btn-icon-right ui-icon-check');
+        $("ol").listview("refresh");
+
+      }
     },
     // `unrender()`: Makes Model remove itself from the DOM.
     unrender: function () {
@@ -66,32 +76,38 @@ define(function (require) {
     },
     initialize: function () {
       _.bindAll(this, 'render', 'addItem', 'appendItem'); // every function that uses 'this' as the current object should be in here
-
       var that = this;
-      this.getSongs();
-      /*setInterval(function () {
-        that.getSongs();
-      }, 15000);*/
+      ga(function (tracker) {
+        var clientId = tracker.get('clientId');
+        console.log(clientId);
+        that.clientId = clientId;
+      });
+      this.getSongs(true);
+      setInterval(function () {
+        that.getSongs(false);
+      }, 15000);
     },
-    getSongs: function () {
+    getSongs: function (render) {
       var entityList = new List();
       entityList.comparator = function (chapter) {
         return chapter.get('id'); // Note the minus! for desc order
       };
-      var that = this;
-      var cid = $('#cid').val();
+      var self = this;
       entityList.fetch({
         data: {
-          userid: cid,
+          user_id: self.clientId,
           slug: 'marcohaus',
           mode: 'BAR'
         },
         success: function (collection, response) {
           console.log(response);
-          that.collection = collection;
-          that.collection.bind('add', this.appendItem); // collection event binder
-          that.counter = 0; // total number of items added thus far
-          that.render();
+          self.collection = collection;
+          self.collection.bind('add', this.appendItem); // collection event binder
+          self.counter = 0; // total number of items added thus far
+          if (render) {
+            self.render();
+          }
+          self.checkStatus();
         },
         error: function (er) {
           console.log(er);
@@ -99,27 +115,35 @@ define(function (require) {
       });
     },
     render: function () {
-      $('ol').empty();
       var self = this;
       _(this.collection.models).each(function (item) { // in case collection is not empty
         self.appendItem(item);
       }, this);
     },
+    checkStatus: function () {
+      var self = this;
+      _(this.collection.models).each(function (item) {
+        var itemView = new ItemView({
+          model: item
+        });
+        itemView.checkItem();
+      }, this);
+    },
+
     addItem: function () {
       var title = $('#title').val();
-      var clientid = $('#cid').val();
       if ($.trim(title) == '')
         return false;
       this.counter++;
       var self = this;
-      var item = new Item({
+      var item = new Item();
+      item.save({
         track: title,
-        user_id: clientid,
+        user_id: self.clientId,
         slug: 'marcohaus',
         mode: 'BAR',
         track_id: '1'
-      });
-      item.save({
+      }, {
         success: function () {
           self.appendItem(item);
         }
@@ -131,7 +155,6 @@ define(function (require) {
       var itemView = new ItemView({
         model: item
       });
-      
       $('ol', this.el).append(itemView.render().el);
       $("ol").listview("refresh");
     }
