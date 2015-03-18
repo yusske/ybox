@@ -65,6 +65,7 @@ class PlaylistController extends AppController {
 	}
 
 	public function add() {
+		$add = true;
 		$data = $this->request->data;
 		$payload = array('Playlist' => array());
 		$payload = json_decode(file_get_contents("php://input"), true);
@@ -80,16 +81,26 @@ class PlaylistController extends AppController {
 				'slug' => $slug
 			)
 		));
+
 		
 		if ($track) {
 			$payload['id'] = $track['Playlist']['id'];
 			$payload['counter'] = $track['Playlist']['counter'] + 1;
+			$add = false;
 		}
 		$result = $this->Playlist->save($payload);
 		$id = $this->Playlist->getLastInsertId();
 		if ($result) {
+			if (!$add) $id = $payload['id'];
+
 			$record = $this->Playlist->findById($id);
-			$record['_added'] = true;
+			if (!$add) {
+				$record['_added'] = false;
+				$record['_modified'] = true;
+			} else {
+				$record['_added'] = true;
+				$record['_modified'] = false;
+			}
 			return $this->json($record);
 		} else {
 			return $this->error("Add Failed", "An error occured while trying to save.");
