@@ -38,6 +38,7 @@ define(function (require) {
       _.bindAll(this, 'render', 'unrender', 'remove'); // every function that uses 'this' as the current object should be in here
       this.model.bind('change', this.render);
       this.model.bind('remove', this.unrender);
+      this.model.on('change', this.render, this);
     },
     // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
     render: function () {
@@ -56,6 +57,8 @@ define(function (require) {
         $(itemId).addClass('ui-btn-b ui-btn ui-btn-icon-right ui-icon-check');
         $("ol").listview("refresh");
 
+      }else{
+        $(itemId).removeClass('ui-btn-b ui-btn ui-btn-icon-right ui-icon-check');
       }
     },
     // `unrender()`: Makes Model remove itself from the DOM.
@@ -144,7 +147,17 @@ define(function (require) {
         mode: 'BAR',
         track_id: '1'
       }, {
-        success: function () {
+        success: function (data) {
+          var changed = data.changed.Playlist;
+          var item = new Item({
+            track: changed.track,
+            artist: changed.artist,
+            status: changed.status,
+            track_id: changed.track_id,
+            mode: changed.mode,
+            user_id: changed.user_id,
+            id: changed.id
+          });
           self.appendItem(item);
         }
       });
