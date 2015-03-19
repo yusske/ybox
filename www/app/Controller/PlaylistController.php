@@ -55,8 +55,9 @@ class PlaylistController extends AppController {
 		if (!is_null($mode)) $cnds['mode'] = $mode;
 		if (!is_null($slug)) $cnds['slug'] = $slug;
 		if (!is_null($user_id)) $cnds['user_id'] = $user_id;
-		$cnds['status'] = array('new','played');
-
+		if (!$user_id) {
+			$cnds['status'] = array('new','played');
+		} 
 		$result = $this->SimplePlaylist->find('all', array('conditions' => $cnds));
 		
 		return $this->format_list($result);
@@ -97,7 +98,8 @@ class PlaylistController extends AppController {
 	public function delete($id=null) {
 		$r = $this->SimplePlaylist->findById($id);
 		if ($r) {
-			$this->SimplePlaylist->delete($id);
+			$this->SimplePlaylist->id = $id;
+			$this->SimplePlaylist->save(array('status' => 'discarded'));
 			$r['_deleted'] = true;
 			return $this->json($r);
 		} else {
@@ -106,7 +108,9 @@ class PlaylistController extends AppController {
 	}
 
 	public function clear() {
-		//$r = $this->SimplePlaylist->deleteAll
+		$r = $this->SimplePlaylist->deleteAll(array(
+			'SimplePlaylist.status' => array('new')
+		));
 	}
 }
 
