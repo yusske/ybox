@@ -1,14 +1,15 @@
 <?php
 
-class BarController extends AppController {
+class HomeController extends AppController {
+	
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->layout = 'layout_bars';
+		$this->layout = 'layout_users';
 	}
 
 	public function index() {
-		
+
 	}
 }
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <?php echo $this->Html->charset(); ?>
+  <title>Mi Play list</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <?php echo $this->Html->css('/js/vendor/jquerymobile/jquery.mobile-1.4.5.min'); ?>
+  <?php echo $this->Html->script('vendor/require/require',array('data-main' => 'js/app/main')); ?>
+  <?php echo $this->Html->css('/js/vendor/jquerymobile/black.min'); ?>
+  <script>
+            require(['main'], function (main) {
+                require(['requestsong']);
+            });
+
+  </script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-30410576-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</head>
+<body>
+<input type="hidden" id="cid">
+  <div data-role="page" >
+    <div data-role="header" data-position="fixed">
+    <h3>Pide tu canción</h1>
+      <div style="padding-left: 10px;padding-top: 0px;padding-right: 10px; margin-top: -15px;" > 
+        <input type="search" id="title" data-theme="c"  placeholder="Título - Artista" value="" class="required">
+        <button style ="width:100%" id='add' class="ui-btn ui-btn-c ui-corner-all">Agregar</button>
+      </div>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content" style="padding-top: 0;">
+      <ol data-role="listview" data-inset="true"  >
+
+      </ol>
+    </div>
+
+    </div>
+  </div>
+
+<script>
+    ga(function(tracker) {
+      var clientId = tracker.get('clientId');
+      console.log(clientId);
+      $('#cid').val(clientId);
+    });
+</script>
+</body>
+</html>

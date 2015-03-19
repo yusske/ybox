@@ -1,0 +1,16 @@
+.icon-youtube{
+	background-image: url(../img/youtube-play.png);
+  display: block;
+  margin: 0 auto;
+  text-indent: -9999px;
+  width: 24px;
+  height: 24px;
+  float: right;
+  /*margin-right: 25px;*/
+}
+
+.track-title{
+	width:90%;
+	padding-left: 22px;
+
+}
