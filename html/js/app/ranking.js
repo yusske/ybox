@@ -24,7 +24,7 @@ define(function (require) {
     className: "js-checksong ui-btn ui-btn-icon-left ui-icon-check",
     events: {
       'click div.swap': 'swap',
-      'click span.delete': 'remove',
+      //'click span.delete': 'remove',
       'click .js-youtube': 'searchYoutube'
     },
     attributes: {
@@ -35,7 +35,7 @@ define(function (require) {
       _.bindAll(this, 'render', 'unrender', 'swap', 'remove'); // every function that uses 'this' as the current object should be in here
 
       this.model.bind('change', this.render);
-      this.model.bind('remove', this.unrender);
+      this.model.bind('remove', this.remove);
     },
     // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
     render: function () {
@@ -50,6 +50,7 @@ define(function (require) {
     // `unrender()`: Makes Model remove itself from the DOM.
     unrender: function () {
       $(this.el).remove();
+      this.model.destroy();
     },
     // `swap()` will interchange an `Item`'s attributes. When the `.set()` model function is called, the event `change` will be triggered.
     swap: function () {
@@ -58,7 +59,7 @@ define(function (require) {
       var that = this;
 
       var s = (this.model.attributes.status != 'played') ? 'played' : 'new';
-      ga.trackEvent('DJ', 'checkSong', this.model.attributes.track,s);
+      ga.trackEvent('DJ', 'checkSong', this.model.attributes.track, s);
       this.model.save({
         status: s
       }, {
@@ -77,6 +78,8 @@ define(function (require) {
     // `remove()`: We use the method `destroy()` to remove a model from its collection. Normally this would also delete the record from its persistent storage, but we have overridden that (see above).
     remove: function () {
       this.model.destroy();
+      $(this.el).remove();
+
     },
     onSucess: function (data) {
       $(this.el).html(this.template({
@@ -129,18 +132,19 @@ define(function (require) {
         }
       });
     },
+
     clearList: function () {
-      var that = this;
-      $.ajax({
-        url: 'http://' + window.location.host + '/ybox/service/clearplaylist.php',
-        type: 'post',
-        success: function (data, textStatus, jqXHR) {
-          that.getSongs();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.log('error...')
+      var staging = [];
+      var self = this;
+      _(this.collection.models).each(function (item) { // in case collection is not empty
+        if (item.get('status') === 'new') {
+          staging.push(item);
         }
+      }, this);
+      _(staging).each(function (item) {
+        self.collection.remove(item);
       });
+      $('#playlist').listview('refresh');
     },
     render: function () {
       // $('#playlist').empty();

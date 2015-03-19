@@ -42,13 +42,13 @@ define(function (require) {
     },
     // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
     render: function () {
-      var songName = this.model.get('track') + ' - ' + this.model.get('artist');
+      var songName = this.model.get('track');// + ' - ' + this.model.get('artist');
       $(this.el).html(songName);
       return this; // for chainable calls, like .render().el
     },
     checkItem: function () {
 
-      var songName = this.model.get('track') + ' - ' + this.model.get('artist');
+      var songName = this.model.get('track'); //+ ' - ' + this.model.get('artist');
       var itemId = '#itemId_' + this.model.get('id');
 
       if (this.model.get('status') === 'played') {
@@ -145,11 +145,11 @@ define(function (require) {
         user_id: self.clientId,
         slug: 'marcohaus',
         mode: 'BAR',
-        track_id: '1'
+        track_id: Math.random()
       }, {
         success: function (data) {
           var changed = data.changed.Playlist;
-          var item = new Item({
+         /* var item = new Item({
             track: changed.track,
             artist: changed.artist,
             status: changed.status,
@@ -157,8 +157,8 @@ define(function (require) {
             mode: changed.mode,
             user_id: changed.user_id,
             id: changed.id
-          });
-          self.appendItem(item);
+          });*/
+          self.appendItem(data);
         }
       });
       $('#title').val('');
