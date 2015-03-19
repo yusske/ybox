@@ -49,11 +49,13 @@ class PlaylistController extends AppController {
 		$mode = (array_key_exists('mode', $this->request->query)) ? $this->request->query['mode'] : null;
 		$slug = (array_key_exists('slug', $this->request->query)) ? $this->request->query['slug'] : null;
 		$user_id = (array_key_exists('user_id', $this->request->query)) ? $this->request->query['user_id'] : null;
+		//$status = (array_key_exists('status', $this->request->query)) ? $this->request->query['status'] : null;
 		
 		$cnds = array();
 		if (!is_null($mode)) $cnds['mode'] = $mode;
 		if (!is_null($slug)) $cnds['slug'] = $slug;
 		if (!is_null($user_id)) $cnds['user_id'] = $user_id;
+		$cnds['status'] = array('new','played');
 
 		$result = $this->SimplePlaylist->find('all', array('conditions' => $cnds));
 		
@@ -101,6 +103,10 @@ class PlaylistController extends AppController {
 		} else {
 			return $this->error("Delete failed","No record with id '$id' found");
 		}
+	}
+
+	public function clear() {
+		//$r = $this->SimplePlaylist->deleteAll
 	}
 }
 
