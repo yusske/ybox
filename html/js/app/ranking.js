@@ -1,5 +1,6 @@
 define(function (require) {
   var Backbone = require('backbone'),
+    ga = require('googleAnalytics'),
     url = require('urlHelper');
   var Item = Backbone.Model.extend({
     defaults: {
@@ -20,10 +21,11 @@ define(function (require) {
   var ItemView = Backbone.View.extend({
     tagName: 'li', // name of tag to be created
     // `ItemView`s now respond to two clickable actions for each `Item`: swap and delete.
-    className: "js-checksong ui-btn ui-btn-icon-right ui-icon-check",
+    className: "js-checksong ui-btn ui-btn-icon-left ui-icon-check",
     events: {
       'click div.swap': 'swap',
-      'click span.delete': 'remove'
+      'click span.delete': 'remove',
+      'click .js-youtube': 'searchYoutube'
     },
     attributes: {
       "data-icon": "check"
@@ -54,7 +56,9 @@ define(function (require) {
       console.log('check/uncheck');
       $(this.el).toggleClass('ui-btn-b');
       var that = this;
+
       var s = (this.model.attributes.status != 'played') ? 'played' : 'new';
+      ga.trackEvent('DJ', 'checkSong', this.model.attributes.track,s);
       this.model.save({
         status: s
       }, {
@@ -63,6 +67,12 @@ define(function (require) {
           console.log(data);
         }
       });
+    },
+    searchYoutube: function () {
+      var query = this.model.attributes.track.replace(' ', '+');
+      var url = 'http://www.youtube.com/results?search_query=' + query;
+      ga.trackEvent('DJ', 'searchYoutube', this.model.attributes.track);
+      window.open(url, '_blank');
     },
     // `remove()`: We use the method `destroy()` to remove a model from its collection. Normally this would also delete the record from its persistent storage, but we have overridden that (see above).
     remove: function () {
@@ -133,7 +143,7 @@ define(function (require) {
       });
     },
     render: function () {
-     // $('#playlist').empty();
+      // $('#playlist').empty();
       var self = this;
       _(this.collection.models).each(function (item) { // in case collection is not empty
         self.appendItem(item);
@@ -146,7 +156,7 @@ define(function (require) {
       if ($('[data-songid=' + item.id + ']').length === 0) {
         $('#playlist', this.el).append(itemView.render().el);
       }
-      
+
       $('#playlist').listview('refresh');
     },
     updateCounter: function () {

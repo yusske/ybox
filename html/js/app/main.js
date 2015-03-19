@@ -12,7 +12,9 @@ require.config({
     underscore: '../vendor/underscore/underscore-master/underscore',
     json:'../vendor/json/JSON-js-master/json2',
     backbone: '../vendor/backbone/backbone',
-    jquerymobile:'../vendor/jquerymobile/jquerymobile'
+    jquerymobile:'../vendor/jquerymobile/jquerymobile',
+    googleAnalytics:'../vendor/Google/googleAnalyticsHandler'
+
     //marionette: 'vendor/backbone.marionette/core/backbone.marionette'
   },
   shim: {
