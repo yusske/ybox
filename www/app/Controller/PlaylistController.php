@@ -70,7 +70,9 @@ class PlaylistController extends AppController {
 		$data = json_decode(file_get_contents("php://input"), true);
 		//$data = $this->request->data;
 		$r = $this->SimplePlaylist->save($data);
+		$id = $this->SimplePlaylist->getLastInsertId();
 		if ($r) {
+			$data['id'] = $id;
 			$data['_added'] = true;
 			return $this->json($data);
 		} else {
