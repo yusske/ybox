@@ -40,7 +40,7 @@ define(function (require) {
     // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
     render: function () {
       var that = this;
-      $.get('views/tweetsTemplate.html', function (data) {
+      $.get('/views/tweetsTemplate.html', function (data) {
         that.template = _.template(data, {});
       }, 'html').done(function () {
         that.onSucess();
@@ -118,8 +118,8 @@ define(function (require) {
       var that = this;
       entityList.fetch({
         data: {
-          slug: 'marcohaus',
-          mode: 'BAR'
+          slug: __bar,
+          mode: __mode
         },
         success: function (collection, response) {
           console.log(response);
