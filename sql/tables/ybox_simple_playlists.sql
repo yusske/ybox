@@ -10,6 +10,7 @@ CREATE TABLE ybox_simple_playlists (
 	user_id BIGINT NOT NULL,
 	status ENUM('new','played','discarded') NOT NULL DEFAULT 'new',
 	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	INDEX IX_ybox_playlist_user_id (user_id)
+	INDEX IX_ybox_playlist_user_id (user_id),
+	INDEX IX_ybox_playlist_mode_slug_status (mode, slug, status)
 );
 
