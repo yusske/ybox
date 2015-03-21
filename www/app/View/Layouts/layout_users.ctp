@@ -5,8 +5,10 @@
   <title>Mi Play list</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <?php echo $this->Html->css('/js/vendor/jquerymobile/jquery.mobile-1.4.5.min'); ?>
-  <?php echo $this->Html->script('vendor/require/require',array('data-main' => 'js/app/main')); ?>
+  <?php echo $this->Html->script('vendor/require/require',array('data-main' => '/js/app/main')); ?>
   <?php echo $this->Html->css('/js/vendor/jquerymobile/black.min'); ?>
+  <?php echo $this->fetch('bar'); ?>
+  <?php echo $this->fetch('bar_error'); ?>
   <script>
             require(['main'], function (main) {
                 require(['requestsong']);
@@ -24,24 +26,8 @@
 
 </head>
 <body>
-<input type="hidden" id="cid">
-  <div data-role="page" >
-    <div data-role="header" data-position="fixed">
-    <h3>Pide tu canción</h1>
-      <div style="padding-left: 10px;padding-top: 0px;padding-right: 10px; margin-top: -15px;" > 
-        <input type="search" id="title" data-theme="c"  placeholder="Título - Artista" value="" class="required">
-        <button style ="width:100%" id='add' class="ui-btn ui-btn-c ui-corner-all">Agregar</button>
-      </div>
-    </div><!-- /header -->
 
-    <div role="main" class="ui-content" style="padding-top: 0;">
-      <ol data-role="listview" data-inset="true"  >
-
-      </ol>
-    </div>
-
-    </div>
-  </div>
+  <?php echo $this->fetch('content'); ?>
 
 <script>
     ga(function(tracker) {

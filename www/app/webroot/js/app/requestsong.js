@@ -99,8 +99,8 @@ define(function (require) {
       entityList.fetch({
         data: {
           user_id: self.clientId,
-          slug: 'marcohaus',
-          mode: 'BAR'
+          slug: __bar,
+          mode: __mode
         },
         success: function (collection, response) {
           console.log(response);
@@ -143,8 +143,8 @@ define(function (require) {
       item.save({
         track: title,
         user_id: self.clientId,
-        slug: 'marcohaus',
-        mode: 'BAR',
+        slug: __bar,
+        mode: __mode,
         track_id: Math.random()
       }, {
         success: function (data) {
