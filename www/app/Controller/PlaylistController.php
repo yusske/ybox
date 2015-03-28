@@ -48,13 +48,13 @@ class PlaylistController extends AppController {
 		
 		$mode = (array_key_exists('mode', $this->request->query)) ? $this->request->query['mode'] : null;
 		$slug = (array_key_exists('slug', $this->request->query)) ? $this->request->query['slug'] : null;
-		$user_id = (array_key_exists('user_id', $this->request->query)) ? $this->request->query['user_id'] : null;
+		$session_id = (array_key_exists('session_id', $this->request->query)) ? $this->request->query['session_id'] : null;
 		//$status = (array_key_exists('status', $this->request->query)) ? $this->request->query['status'] : null;
 		
 		$cnds = array();
 		if (!is_null($mode)) $cnds['mode'] = $mode;
 		if (!is_null($slug)) $cnds['slug'] = $slug;
-		if (!is_null($user_id)) $cnds['user_id'] = $user_id;
+		if (!is_null($session_id)) $cnds['session_id'] = $session_id;
 		if (!$user_id) {
 			$cnds['status'] = array('new','played');
 		} 
