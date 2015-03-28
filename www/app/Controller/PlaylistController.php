@@ -58,7 +58,10 @@ class PlaylistController extends AppController {
 		if (!$session_id) {
 			$cnds['status'] = array('new','played');
 		} 
-		$result = $this->SimplePlaylist->find('all', array('conditions' => $cnds));
+		$result = $this->SimplePlaylist->find('all', array(
+			'conditions' => $cnds,
+			'order' => array('SimplePlaylist.status DESC', 'SimplePlaylist.id ASC')
+		));
 		
 		return $this->format_list($result);
 	}
