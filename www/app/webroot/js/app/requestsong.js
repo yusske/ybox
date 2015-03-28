@@ -12,7 +12,7 @@ define(function (require) {
       track_id: '',
       mode: 'BAR',
       slug: '',
-      user_id: '0-0'
+      session_id: '0-0'
     }
   });
 
@@ -98,7 +98,7 @@ define(function (require) {
       var self = this;
       entityList.fetch({
         data: {
-          user_id: self.clientId,
+          session_id: self.clientId,
           slug: __bar,
           mode: __mode
         },
@@ -142,7 +142,7 @@ define(function (require) {
       var item = new Item();
       item.save({
         track: title,
-        user_id: self.clientId,
+        session_id: self.clientId,
         slug: __bar,
         mode: __mode,
         track_id: Math.random()
@@ -155,7 +155,7 @@ define(function (require) {
             status: changed.status,
             track_id: changed.track_id,
             mode: changed.mode,
-            user_id: changed.user_id,
+            session_id: changed.session_id,
             id: changed.id
           });*/
           self.appendItem(data);

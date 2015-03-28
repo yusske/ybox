@@ -8,9 +8,11 @@ CREATE TABLE ybox_simple_playlists (
 	mode ENUM('DJ','BAR') NOT NULL,
 	slug VARCHAR(32) NOT NULL,
 	user_id BIGINT NOT NULL,
+	session_id VARCHAR(32) NOT NULL,
 	status ENUM('new','played','discarded') NOT NULL DEFAULT 'new',
 	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	INDEX IX_ybox_playlist_user_id (user_id),
+	INDEX IX_ybox_playlist_session_id (session_id),
 	INDEX IX_ybox_playlist_mode_slug_status (mode, slug, status)
 );
 
