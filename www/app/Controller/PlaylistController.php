@@ -55,7 +55,7 @@ class PlaylistController extends AppController {
 		if (!is_null($mode)) $cnds['mode'] = $mode;
 		if (!is_null($slug)) $cnds['slug'] = $slug;
 		if (!is_null($session_id)) $cnds['session_id'] = $session_id;
-		if (!$user_id) {
+		if (!$session_id) {
 			$cnds['status'] = array('new','played');
 		} 
 		$result = $this->SimplePlaylist->find('all', array('conditions' => $cnds));
